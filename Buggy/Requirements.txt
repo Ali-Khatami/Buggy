@@ -1,0 +1,17 @@
+﻿Goal: To discover a little more about your thought processes behind your development
+Task: Bugtracker Application
+Description: Create an MVC based web application that encompasses the following functionality:
+
+-Public Side
+*Ability for a user to add a new bug or edit an existing bug. 
+*Each bug needs to have the following fields (at minimum):
+-Name, Date, Email, Phone, Severity, Bug Description
+*Application should be backed by a code-first Entity Framework Database.
+
+-Admin Side
+*Ability to Search for bugs by any field you choose and subsequent display of the results.
+*Add Form Validation based on data annotations
+*Ability to delete bugs from the database
+*Authentication/Login to the Admin (optional)
+
++Any other items you see fit
