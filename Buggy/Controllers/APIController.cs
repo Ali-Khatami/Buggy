@@ -28,8 +28,7 @@ namespace Buggy.Controllers
 				CurrentState = Bug.State.Created,
 				InsertDate = DateTime.Now,
 				ResolverID = resolver,
-				TesterID = tester,
-				Updates = new List<Bug.Update>() { }
+				TesterID = tester
 			});
 
 			return Json(new { success = db.SaveChanges() == 1 });
@@ -38,41 +37,20 @@ namespace Buggy.Controllers
 		[AJAXAuthenticationFilter(SectionRequiresAuthentication = true, AdminOnly = false)]
 		public JsonResult AddUpdate(int bugID, string description)
 		{
-			var bug = db.Bugs.Find(bugID);
-			bool success = false;
-			string sMessage = "";
-
-			if (bug != null && bug.ID == bugID && !string.IsNullOrEmpty(description))
-			{
-				bug.Updates = bug.Updates ?? new List<Bug.Update>();
-
-				bug.Updates.Add(
-					new Bug.Update()
-					{
-						InsertDate = DateTime.Now,
-						UpdaterID = UserUtils.CurrentUser.ID,
-						Description = description
-					}
-				);
-
-				success = (db.SaveChanges() > 0);
-
-				if (!success) { sMessage = "Unable to save updates."; }
-			}
-			else if (string.IsNullOrEmpty(description))
-			{
-				sMessage = "Description is null or empty.";
-			}
-			else
-			{
-				sMessage = string.Format("Unable to find bug {0}", bugID);
-			}
+			db.BugUpdates.Add(
+				new BugUpdate()
+				{
+					InsertDate = DateTime.Now,
+					BugID = bugID,
+					UpdaterID = UserUtils.CurrentUser.ID,
+					Description = description
+				}
+			);
 
 			return Json(
 				new
 				{
-					success = success,
-					message = sMessage
+					success = db.SaveChanges()
 				}
 			);
 		}

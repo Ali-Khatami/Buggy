@@ -21,6 +21,7 @@ namespace Buggy.Models
 		/// A Name/Title for the bug.
 		/// </summary>
 		[DisplayName("Bug Title")]
+		[StringLength(125, ErrorMessage="Bug Title cannot be more than 125 characters in length.")]
 		[Required(AllowEmptyStrings = false, ErrorMessage = "Bug Title cannot be null or empty.")]
 		public string Name { get; set; }
 		/// <summary>
@@ -48,7 +49,7 @@ namespace Buggy.Models
 				// grab the last updates time or just use the insert date
 				if(Updates != null && Updates.Count > 0)
 				{
-					dtLastUpdate = Updates.Last().InsertDate;
+					dtLastUpdate = Updates.First().InsertDate;
 				}
 
 				return dtLastUpdate;
@@ -93,10 +94,20 @@ namespace Buggy.Models
 				return db.Users.Find(this.TesterID);
 			}
 		}
+
 		/// <summary>
 		/// The history of updates on the bug. Generally the conversation regarding details/fixes.
 		/// </summary>
-		public virtual ICollection<Update> Updates { get; set; }
+		public virtual List<BugUpdate> Updates
+		{
+			get
+			{
+				SiteDB db = new SiteDB();
+
+				return db.BugUpdates.Where( update => update.BugID == this.ID).OrderByDescending(bupdate => bupdate.InsertDate).ToList();
+			}
+		}
+
 		/// <summary>
 		/// The priorty level of the bug.
 		/// </summary>
@@ -109,25 +120,6 @@ namespace Buggy.Models
 		/// A generic description of the bug type. ie. enhancement, bug, non issue, etc.
 		/// </summary>
 		public BugType Type { get; set; }
-
-		/// <summary>
-		/// A simple update on the bug.
-		/// </summary>
-		public class Update
-		{
-			public User Updater
-			{
-				get
-				{
-					SiteDB db = new SiteDB();
-
-					return db.Users.Find(this.UpdaterID);
-				}
-			}
-			public int UpdaterID { get; set; }
-			public string Description { get; set; }
-			public DateTime InsertDate { get; set; }
-		}
 
 		public enum PriorityLevel
 		{

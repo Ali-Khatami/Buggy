@@ -10,6 +10,8 @@
 <div class="row-fluid">
 	<div class="span12">
 		<div class="module-inner">
+			<a href="~/Site/Index" class="btn btn-info btn-small btn-block">< Go Back</a><br />
+
 			<small>Last Updated: </small> <strong>@Model.LastUpdatedDate.ToString("MM/dd/yyyy h:mm tt")</strong><br />
 			<small>Severity: </small> <strong>@Model.Priority.ToString()</strong><br />
 			<small>Current State: </small> <strong>@Model.CurrentState.ToString()</strong>
@@ -20,8 +22,8 @@
 				@Model.Name
 			</h2>
 			
-			<small>Creator: </small> <strong>@Model.Creator.Name.ToString()</strong>
-			<small>Tester: </small> <strong>@Model.Tester.Name.ToString()</strong>
+			<small>Creator: </small> <strong>@Model.Creator.Name.ToString()</strong><br />
+			<small>Tester: </small> <strong>@Model.Tester.Name.ToString()</strong><br />
 			<small>Resolver: </small> <strong>@Model.Resolver.Name.ToString()</strong>
 			
 			<h2>
