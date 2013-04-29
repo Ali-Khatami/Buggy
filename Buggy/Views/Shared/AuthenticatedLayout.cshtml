@@ -1,0 +1,70 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width" />
+    <title>@ViewBag.Title | Buggy</title>
+    @Styles.Render("~/Content/CommonCSS")
+	@Styles.Render("~/Content/themes/base/css")
+	@Styles.Render("~/Content/BuggyAuthenticatedCSS")
+    @Scripts.Render("~/bundles/modernizr")
+</head>
+<body>
+
+	<div class="navbar navbar-fixed-top navbar-inverse">
+			<div class="navbar-inner">
+				<div class="container">
+ 
+					<!-- .btn-navbar is used as the toggle for collapsed navbar content -->
+					<a class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse">
+						<span class="icon-bar"></span>
+						<span class="icon-bar"></span>
+						<span class="icon-bar"></span>
+					</a>
+ 
+					<!-- Be sure to leave the brand out there if you want it shown -->
+					<a class="brand" href="~/">Buggy</a>
+ 
+					<!-- Everything you want hidden at 940px or less, place within here -->
+					<div class="nav-collapse collapse">
+						<span class="user-name">Welcome, <strong>@Buggy.Utilities.UserUtils.CurrentUser.Name</strong></span>
+						<ul class="nav">
+							<li>
+								<a href="#NewBugModal" role="button" data-toggle="modal"><i class="icon-plus-sign icon-white"></i> New Bug</a>
+							</li>
+							<li>
+								<a href="javascript:void(0);"><i class="icon-user icon-white"></i> My Profile</a>
+							</li>
+							<li>
+								<a id="SignOutUser" href="javascript:void(0);">Sign Out</a>
+							</li>
+						</ul>
+					</div>
+ 
+				</div>
+			</div>
+		</div>
+
+	<div class="container">
+
+		<div class="row-fluid">
+
+			<div class="span10 offset1">
+
+				@RenderBody()
+
+			</div>
+
+		</div>
+
+	</div>
+	@Html.Partial("~/Views/Partials/Modals/NewBugModal.cshtml")
+	<script type="text/javascript">
+		@Html.Raw(Buggy.Utilities.Util.ResolveUrlInlineScript)
+	</script>
+    @Scripts.Render("~/bundles/CommonJS")
+	@Scripts.Render("~/bundles/jqueryui")
+	@Scripts.Render("~/bundles/BuggyAuthenticatedJS")
+    @RenderSection("scripts", required: false)
+</body>
+</html>

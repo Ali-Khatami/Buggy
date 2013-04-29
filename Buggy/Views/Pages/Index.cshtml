@@ -1,6 +1,36 @@
-﻿@{
+﻿@model Buggy.Models.Pages.OverviewPageModel
+
+@{
     ViewBag.Title = "Index";
-    Layout = "~/Views/Shared/_Layout.cshtml";
+	Layout = "~/Views/Shared/AuthenticatedLayout.cshtml";
 }
 
-<h2>Index</h2>
+<div class="row-fluid">
+	<div class="span12">
+		<div class="module-inner">
+			<h2>Bugs created by you</h2>
+			@Html.Partial("~/Views/Partials/BugOverviewFilterForm.cshtml")
+			@Html.Partial("~/Views/Partials/BugOverviewTable.cshtml", Model.BugsCreatedByMe)
+		</div>
+	</div>
+</div>
+
+<div class="row-fluid">
+	<div class="span12">
+		<div class="module-inner">
+			<h2>Bugs for you to resolve</h2>
+			@Html.Partial("~/Views/Partials/BugOverviewFilterForm.cshtml")
+			@Html.Partial("~/Views/Partials/BugOverviewTable.cshtml", Model.BugsToBeResolvedByMe)
+		</div>
+	</div>
+</div>
+
+<div class="row-fluid">
+	<div class="span12">
+		<div class="module-inner">
+			<h2>Bugs for you to test</h2>
+			@Html.Partial("~/Views/Partials/BugOverviewFilterForm.cshtml")
+			@Html.Partial("~/Views/Partials/BugOverviewTable.cshtml", Model.BugsToBeTestedByMe)
+		</div>
+	</div>
+</div>

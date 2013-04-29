@@ -16,12 +16,24 @@ namespace Buggy
 			routes.MapRoute(
 				name: "Default",
 				url: "{controller}/{action}/{id}",
-				defaults: new { controller = "Site", action = "Index", id = UrlParameter.Optional }
+				defaults: new { controller = "Login", action = "Index", id = UrlParameter.Optional }
 			);
 
 			routes.MapRoute(
 				name: "Site",
 				url: "Site/{action}",
+				defaults: new { controller = "Site", action = "Index", id = UrlParameter.Optional }
+			);
+
+			routes.MapRoute(
+				name: "Login",
+				url: "Login/{action}",
+				defaults: new { controller = "Login", action = "Index", id = UrlParameter.Optional }
+			);
+
+			routes.MapRoute(
+				name: "SiteDefault",
+				url: "{action}",
 				defaults: new { controller = "Site", action = "Index", id = UrlParameter.Optional }
 			);
 		}

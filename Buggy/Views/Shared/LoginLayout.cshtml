@@ -1,0 +1,20 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width" />
+    <title>@ViewBag.Title | Buggy</title>
+	@Styles.Render("~/Content/CommonCSS")
+    @Styles.Render("~/Content/LoginCSS")
+    @Scripts.Render("~/bundles/modernizr")
+</head>
+<body>
+	@RenderBody()
+    @Scripts.Render("~/bundles/CommonJS")
+	@Scripts.Render("~/bundles/LoginJS")
+	<script type="text/javascript">
+		@Html.Raw(Buggy.Utilities.Util.ResolveUrlInlineScript)
+	</script>
+	@RenderSection("scripts", required: false)
+</body>
+</html>

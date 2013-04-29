@@ -1,0 +1,27 @@
+﻿.navbar-inverse .brand,
+.navbar-inverse .nav > li > a
+{
+	color: #fff;
+}
+
+	.navbar-inverse .brand:hover,
+	.navbar-inverse .nav > li > a:hover
+	{
+		color: #999;
+	}
+
+.navbar-inverse span.user-name
+{
+	color: #fff;
+	display: inline-block;
+	float: left;
+	line-height: 20px;
+	padding: 10px 15px 10px;
+}
+
+div.module-inner
+{
+	background-color: #fff;
+	padding: 10px;
+	margin-bottom: 20px;
+}

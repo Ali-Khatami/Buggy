@@ -1,0 +1,37 @@
+﻿@using Buggy.Models;
+
+@model Buggy.ViewModels.Partials.BugOverviewTableViewModel
+
+<table data-filter_field="@Model.FilterField.ToString()" data-filter_value="@Model.FilterValue" class="table table-hover">
+	<thead>
+		<tr>
+			<th class="name" data-sort_value="Name">Name</th>
+			<th class="description" data-sort_value="Description">Description</th>
+			<th class="last-updated" data-sort_value="LastUpdatedDate">Last Updated <i class="icon-chevron-down"></i></th>
+			<th class="severity" data-sort_value="Priority">Severity</th>
+			<th class="resolver" data-sort_value="Resolver.ID">Resolver</th>
+			<th class="tester" data-sort_value="Tester.ID">Tester</th>
+			<th class="current-state" data-sort_value="CurrentState">State</th>
+		</tr>
+	</thead>
+	<tbody>
+		@if (Model.Bugs == null || Model.Bugs.Count == 0)
+		{
+			<tr>
+				<td colspan="7" class="no-bugs">No bugs, Awesome work!</td>
+			</tr>
+		}
+		@foreach(var bug in Model.Bugs)
+		{
+			<tr data-bug_id="@bug.ID">
+				<td class="name">@bug.Name</td>
+				<td class="description">@bug.Description</td>
+				<td class="last-updated">@bug.LastUpdatedDate.ToString("MM/dd/yyyy h:mm tt")</td>
+				<td class="severity">@bug.Priority.ToString()</td>
+				<td class="resolver">@bug.Resolver.Name</td>
+				<td class="tester">@bug.Tester.Name</td>
+				<td class="current-state">@bug.CurrentState.ToString()</td>
+			</tr>
+		}
+	</tbody>
+</table>

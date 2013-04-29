@@ -1,0 +1,75 @@
+﻿@using Buggy.Models;
+
+@{
+	var bugTypes = Enum.GetValues(typeof(Bug.BugType)).Cast<Bug.BugType>();
+	var bugPriorityLevels = Enum.GetValues(typeof(Bug.PriorityLevel)).Cast<Bug.PriorityLevel>();
+}
+
+<div id="NewBugModal" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="NewBugModalLabel" aria-hidden="true">
+	<div class="modal-header">
+		<button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+		<h3 id="NewBugModalLabel">Add new bug</h3>
+	</div>
+	<div class="modal-body">
+		<p>Use the fields below to quickly and easily create a new bug.</p>
+		<form class="form-horizontal">
+			
+			<div class="control-group">
+				<label class="control-label" for="Name">Name</label>
+				<div class="controls">
+					<input type="text" id="Name" placeholder="Descriptive Title" />
+				</div>
+			</div>
+
+			<div class="control-group">
+				<label class="control-label" for="Type">Bug Type</label>
+				<div class="controls">
+					<select id="Type">
+						@foreach (var type in bugTypes)
+						{
+							<option value="@(((int)type).ToString())">@type.ToString().Replace("_"," ")</option>
+						}
+					</select>
+				</div>
+			</div>
+
+			<div class="control-group">
+				<label class="control-label" for="Priority">Severity</label>
+				<div class="controls">
+					<select id="Priority">
+						@foreach (var level in bugPriorityLevels)
+						{
+							<option value="@(((int)level).ToString())">@(((int)level).ToString()) - @level.ToString()</option>
+						}
+					</select>
+				</div>
+			</div>
+
+			<div class="control-group">
+				<label class="control-label" for="Description">Description</label>
+				<div class="controls">
+					<textarea id="Description" rows="3" placeholder="Full Description"></textarea>
+				</div>
+			</div>
+
+			<div class="control-group">
+				<label class="control-label" for="Resolver">Resolver</label>
+				<div class="controls">
+					<input type="text" id="Resolver" placeholder="Resolver Name" />
+				</div>
+			</div>
+
+			<div class="control-group">
+				<label class="control-label" for="Tester">Tester</label>
+				<div class="controls">
+					<input type="text" id="Tester" placeholder="Tester Name" />
+				</div>
+			</div>
+
+		</form>
+	</div>
+	<div class="modal-footer">
+		<button class="btn" data-dismiss="modal" aria-hidden="true">Cancel</button>
+		<button id="DoCreateBugButton" class="btn btn-primary">Create Bug</button>
+	</div>
+</div>

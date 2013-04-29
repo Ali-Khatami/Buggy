@@ -12,7 +12,7 @@ namespace Buggy.Utilities
 {
 	public class UserUtils
 	{
-		public const string USER_ID_COOKIE_NAME = "Buggy_User_ID";
+		public static string USER_ID_COOKIE_NAME = "Buggy_User";
 
 		/// <summary>
 		/// Grabs the current user in context using the encrypted cookie.
@@ -28,7 +28,7 @@ namespace Buggy.Utilities
 
 				if (userCookie != null && !string.IsNullOrEmpty(userCookie.Value))
 				{
-					string sUserId = SimpleCrypto.DecryptData(userCookie.Value);
+					string sUserId = SimpleCrypto.Decrypt(userCookie.Value);
 
 					int iUserID = -1;
 
@@ -46,31 +46,47 @@ namespace Buggy.Utilities
 		/// Creates an encrypted user cookie that we can read on subsequent requests.
 		/// </summary>
 		/// <param name="sUserID">The userID in plaintext.</param>
-		public static void CreateEncrypteUserCookie(string sUserID)
+		public static void CreateEncryptedUserCookie(int sUserID)
 		{
-			CreateEncrypteUserCookie(sUserID, null);
+			CreateEncryptedUserCookie(sUserID, false);
 		}
 
 		/// <summary>
 		/// Creates an encrypted user cookie that we can read on subsequent requests.
 		/// </summary>
 		/// <param name="sUserID">The userID in plaintext.</param>
-		/// <param name="expirationDays">The number of days to add for expiration. If null cookie will default to session.</param>
-		public static void CreateEncrypteUserCookie(string sUserID, int? expirationDays)
+		/// <param name="remember">
+		/// Whether or not to remember the user,ie keep the cookie around for at least a little while.
+		/// If null cookie will default to session.
+		/// </param>
+		public static void CreateEncryptedUserCookie(int sUserID, bool? remember)
 		{
 			var cookie = new HttpCookie(
 				USER_ID_COOKIE_NAME,
-				SimpleCrypto.EncryptData(sUserID)
+				SimpleCrypto.Encrypt(sUserID.ToString())
 			);
 
 			// if expirationdays has a value we will add that amount of days to today
-			if (expirationDays.HasValue)
+			if (remember.GetValueOrDefault(false))
 			{
-				cookie.Expires = DateTime.Today.AddDays(expirationDays.Value);
+				cookie.Expires = DateTime.Today.AddDays(30);
 			}
 
 			// set the cookie
 			HttpContext.Current.Response.Cookies.Set(cookie);
+		}
+
+		/// <summary>
+		/// Removes the current users encrypted user cookie.
+		/// </summary>
+		public static void DestroyEncryptedUserCookie()
+		{
+			HttpCookie userCookie = HttpContext.Current.Request.Cookies.Get(USER_ID_COOKIE_NAME);
+			if (userCookie != null)
+			{
+				userCookie.Expires = DateTime.Today.AddDays(-1);
+				HttpContext.Current.Response.Cookies.Set(userCookie);
+			}
 		}
 	}
 }

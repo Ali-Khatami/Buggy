@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
+using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Web;
 
@@ -16,16 +18,28 @@ namespace Buggy.Models
 		/// </summary>
 		public int ID { get; set; }
 		/// <summary>
+		/// This is what a user logs into the site with.
+		/// </summary>
+		[DisplayName("Username")]
+		[Required(AllowEmptyStrings=false, ErrorMessage="Username cannot be null or empty.")]
+		public string LoginID { get; set; }
+		/// <summary>
 		/// User's password
 		/// </summary>
+		[DisplayName("Password")]
+		[Required(AllowEmptyStrings = false, ErrorMessage = "Password cannot be null or empty.")]
 		public string Password { get; set; }
 		/// <summary>
 		/// Person's first name.
 		/// </summary>
+		[DisplayName("First Name")]
+		[Required(AllowEmptyStrings = false, ErrorMessage = "First Name cannot be null or empty.")]
 		public string FirstName { get; set; }
 		/// <summary>
 		/// Person's last name.
 		/// </summary>
+		[DisplayName("Last Name")]
+		[Required(AllowEmptyStrings = false, ErrorMessage = "Last Name cannot be null or empty.")]
 		public string LastName { get; set; }
 		/// <summary>
 		/// Person's full name.
@@ -40,10 +54,16 @@ namespace Buggy.Models
 		/// <summary>
 		/// Person's email address.
 		/// </summary>
+		[DisplayName("Email")]
+		[Required(AllowEmptyStrings = false, ErrorMessage = "Email cannot be null or empty.")]
+		[EmailAddress(ErrorMessage = "Invalid Email address.")]
 		public string Email { get; set; }
 		/// <summary>
 		/// Person's phone number.
 		/// </summary>
+		[DisplayName("Phone")]
+		[Required(AllowEmptyStrings = false, ErrorMessage = "Phone cannot be null or empty.")]
+		[Phone(ErrorMessage = "Invalid Phone number.")]
 		public string PhoneNumber { get; set; }
 		/// <summary>
 		/// Person's current session identifier.

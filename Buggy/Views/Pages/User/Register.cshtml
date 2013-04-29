@@ -1,0 +1,84 @@
+﻿@{
+	Layout = "~/Views/Shared/LoginLayout.cshtml";
+	ViewBag.Title = "User Registration";
+}
+
+<div id="RegisterContainer" class="container">
+		
+	<div class="row-fluid">
+		<div id="RegistrationFormArea" class="span6 offset3">
+			<div class="inner">
+
+				<div class="row-fluid">
+					<div class="span10 offset1">
+						<h1>Register With Buggy</h1>
+					</div>
+				</div>
+		
+				<div class="row-fluid">
+					<div class="span10 offset1">
+						<form id="RegistrationForm" class="form-horizontal">
+
+							<div class="control-group">
+								<label class="control-label" for="LoginID">Username</label>
+								<div class="controls">
+									<input id="LoginID" type="text" placeholder="How you want to log in" />
+									<span class="help-inline"></span>
+								</div>
+							</div>
+
+							<div class="control-group">
+								<label class="control-label" for="Password">Password</label>
+								<div class="controls">
+									<input id="Password" type="password" placeholder="Password" />
+									<span class="help-inline">15 characters max</span>
+								</div>
+							</div>
+
+							<div class="control-group">
+								<label class="control-label" for="PasswordConfirm">Password Confirm</label>
+								<div class="controls">
+									<input id="PasswordConfirm" type="password" placeholder="Confirm Password" />
+									<span class="help-inline"></span>
+								</div>
+							</div>
+
+							<div class="control-group">
+								<label class="control-label" for="FirstName">First Name</label>
+								<div class="controls">
+									<input id="FirstName" type="text" placeholder="First Name" />
+								</div>
+							</div>
+
+							<div class="control-group">
+								<label class="control-label" for="LastName">Last Name</label>
+								<div class="controls">
+									<input id="LastName" type="text" placeholder="Last Name" />
+								</div>
+							</div>
+
+							<div class="control-group">
+								<label class="control-label" for="Email">Email</label>
+								<div class="controls">
+									<input id="Email" type="text" placeholder="Email" />
+								</div>
+							</div>
+
+							<div class="control-group">
+								<label class="control-label" for="Phone">Phone</label>
+								<div class="controls">
+									<input id="Phone" type="text" placeholder="Phone" />
+									<span class="help-inline">xxx-xxx-xxxx</span>
+								</div>
+							</div>
+
+							<button id="DoRegister" class="btn btn-large btn-block btn-primary" type="submit">Register and Login</button>
+
+						</form>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+
+</div>

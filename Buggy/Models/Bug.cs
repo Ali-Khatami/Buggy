@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Web;
@@ -19,18 +20,25 @@ namespace Buggy.Models
 		/// <summary>
 		/// A Name/Title for the bug.
 		/// </summary>
+		[DisplayName("Bug Title")]
+		[Required(AllowEmptyStrings = false, ErrorMessage = "Bug Title cannot be null or empty.")]
 		public string Name { get; set; }
 		/// <summary>
 		/// A detailed descripion explaining.
 		/// </summary>
+		[DisplayName("Bug Description")]
+		[Required(AllowEmptyStrings = false, ErrorMessage = "Bug Description cannot be null or empty.")]
 		public string Description { get; set; }
 		/// <summary>
 		/// The date the bug was created and inserted into the database.
 		/// </summary>
+		[DisplayName("Insert Date")]
+		[Required(ErrorMessage = "Insert Date must be a valid date.")]
 		public DateTime InsertDate { get; set; }
 		/// <summary>
 		/// The last time the bug was updated.
 		/// </summary>
+		[DisplayName("Last Updated Date")]
 		public DateTime LastUpdatedDate
 		{
 			get
@@ -40,7 +48,7 @@ namespace Buggy.Models
 				// grab the last updates time or just use the insert date
 				if(Updates != null && Updates.Count > 0)
 				{
-					dtLastUpdate = Updates[Updates.Count - 1].InsertDate;
+					dtLastUpdate = Updates.Last().InsertDate;
 				}
 
 				return dtLastUpdate;
@@ -49,19 +57,46 @@ namespace Buggy.Models
 		/// <summary>
 		/// The user who entered the bug.
 		/// </summary>
-		public User Creator { get; set; }
+		public User Creator
+		{
+			get
+			{
+				SiteDB db = new SiteDB();
+
+				return db.Users.Find(this.CreatorID);
+			}
+		}
+		public int CreatorID { get; set; }
+		public int TesterID { get; set; }
+		public int ResolverID { get; set; }
 		/// <summary>
 		/// The user who is assigned to resolve the bug.
 		/// </summary>
-		public User Resolver { get; set; }
+		public User Resolver
+		{
+			get
+			{
+				SiteDB db = new SiteDB();
+
+				return db.Users.Find(this.ResolverID);
+			}
+		}
 		/// <summary>
 		/// The user who is assigned to test the resolution to the bug.
 		/// </summary>
-		public User Tester { get; set; }
+		public User Tester
+		{
+			get
+			{
+				SiteDB db = new SiteDB();
+
+				return db.Users.Find(this.TesterID);
+			}
+		}
 		/// <summary>
 		/// The history of updates on the bug. Generally the conversation regarding details/fixes.
 		/// </summary>
-		public List<Update> Updates { get; set; }
+		public virtual ICollection<Update> Updates { get; set; }
 		/// <summary>
 		/// The priorty level of the bug.
 		/// </summary>
@@ -80,9 +115,18 @@ namespace Buggy.Models
 		/// </summary>
 		public class Update
 		{
-			public User Updater { get; set; }
+			public User Updater
+			{
+				get
+				{
+					SiteDB db = new SiteDB();
+
+					return db.Users.Find(this.UpdaterID);
+				}
+			}
+			public int UpdaterID { get; set; }
 			public string Description { get; set; }
-			public DateTime InsertDate = DateTime.Now;
+			public DateTime InsertDate { get; set; }
 		}
 
 		public enum PriorityLevel
@@ -109,6 +153,18 @@ namespace Buggy.Models
 			Resolved,
 			Closed,
 			On_Hold
+		}
+
+		public enum FilterableFields
+		{
+			Name,
+			Description,
+			Creator,
+			Resolver,
+			Tester,
+			Type,
+			Priority,
+			State
 		}
 	}
 }

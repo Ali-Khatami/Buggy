@@ -11,86 +11,33 @@ namespace Buggy.Utilities
 {
 	public class SimpleCrypto
 	{
-		/// <summary>
-		/// The encryption key.
-		/// </summary>
-		private static byte[] AESKey = ASCIIEncoding.UTF8.GetBytes("AESKEY");
-		/// <summary>
-		/// The encryption vector.
-		/// </summary>
-		private static byte[] AESVector = ASCIIEncoding.UTF8.GetBytes("AESVECTOR");
+		private static byte[] DESKey = { 10, 5, 90, 55, 9, 18, 19, 4 };
+		private static byte[] DESInitializationVector = { 0, 1, 2, 3, 4, 5, 6, 7, 8, 9 };
 
-		/// <summary>
-		/// Used for serializing and encrypting data.
-		/// </summary>
-		/// <param name="data">Any data type you like. Will be serialized as JSON so be sure to allow for this.</param>
-		/// <returns>Returns an encrypted string using AES.</returns>
-		public static string EncryptData(object data)
+		public static string Encrypt(string value)
 		{
-			JavaScriptSerializer ser = new JavaScriptSerializer();
-
-			return EncryptData(ser.Serialize(data));
+			using (var cryptoProvider = new DESCryptoServiceProvider())
+			using (var memoryStream = new MemoryStream())
+			using (var cryptoStream = new CryptoStream(memoryStream, cryptoProvider.CreateEncryptor(DESKey, DESInitializationVector), CryptoStreamMode.Write))
+			using (var writer = new StreamWriter(cryptoStream))
+			{
+				writer.Write(value);
+				writer.Flush();
+				cryptoStream.FlushFinalBlock();
+				writer.Flush();
+				return Convert.ToBase64String(memoryStream.GetBuffer(), 0, (int)memoryStream.Length);
+			}
 		}
 
-		/// <summary>
-		/// Used for serializing and encrypting plain text
-		/// </summary>
-		/// <param name="data">A string of information in plain text</param>
-		/// <returns>Returns an encrypted string using AES.</returns>
-		public static string EncryptData(string data)
+		public static string Decrypt(string value)
 		{
-			RijndaelManaged aesAlg = new RijndaelManaged();
-			aesAlg.Key = AESKey;
-			aesAlg.IV = AESVector;
-			ICryptoTransform encryptor = aesAlg.CreateEncryptor(aesAlg.Key, aesAlg.IV);
-
-			MemoryStream msEncrypt = new MemoryStream();
-
-			using (CryptoStream csEncrypt = new CryptoStream(msEncrypt, encryptor, CryptoStreamMode.Write))
+			using (var cryptoProvider = new DESCryptoServiceProvider())
+			using (var memoryStream = new MemoryStream(Convert.FromBase64String(value)))
+			using (var cryptoStream = new CryptoStream(memoryStream, cryptoProvider.CreateDecryptor(DESKey, DESInitializationVector), CryptoStreamMode.Read))
+			using (var reader = new StreamReader(cryptoStream))
 			{
-				using (StreamWriter swEncrypt = new StreamWriter(csEncrypt))
-				{
-					swEncrypt.Write(data);
-				}
+				return reader.ReadToEnd();
 			}
-
-			byte[] encrypedBytes = msEncrypt.ToArray();
-
-			return ASCIIEncoding.UTF8.GetString(encrypedBytes);
-		}
-
-		/// <summary>
-		/// Used for decrypting information back into plain text.
-		/// </summary>
-		/// <param name="encryptedData">A string of encrypted data.</param>
-		/// <returns>Returns decrypted information in plain text.</returns>
-		public static string DecryptData(string encryptedData)
-		{
-			string sDecryptedData;
-
-			RijndaelManaged aesAlg = new RijndaelManaged();
-			aesAlg.Key = AESKey;
-			aesAlg.IV = AESVector;
-
-			// Create a decrytor to perform the stream transform.
-			ICryptoTransform decryptor = aesAlg.CreateDecryptor(aesAlg.Key, aesAlg.IV);
-
-			// Create the streams used for decryption. 
-			using (MemoryStream msDecrypt = new MemoryStream(ASCIIEncoding.UTF8.GetBytes(encryptedData)))
-			{
-				using (CryptoStream csDecrypt = new CryptoStream(msDecrypt, decryptor, CryptoStreamMode.Read))
-				{
-					using (StreamReader srDecrypt = new StreamReader(csDecrypt))
-					{
-
-						// Read the decrypted bytes from the decrypting stream 
-						// and place them in a string.
-						sDecryptedData = srDecrypt.ReadToEnd();
-					}
-				}
-			}
-
-			return sDecryptedData;
 		}
 	}
 }

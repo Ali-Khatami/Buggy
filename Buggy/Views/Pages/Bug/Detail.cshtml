@@ -1,0 +1,73 @@
+﻿@model Buggy.Models.Bug
+
+@{
+    ViewBag.Title = "Detail";
+    Layout = "~/Views/Shared/AuthenticatedLayout.cshtml";
+}
+
+@Html.Partial("~/Views/Partials/Modals/AddUpdateModal.cshtml")
+
+<div class="row-fluid">
+	<div class="span12">
+		<div class="module-inner">
+			<small>Last Updated: </small> <strong>@Model.LastUpdatedDate.ToString("MM/dd/yyyy h:mm tt")</strong><br />
+			<small>Severity: </small> <strong>@Model.Priority.ToString()</strong><br />
+			<small>Current State: </small> <strong>@Model.CurrentState.ToString()</strong>
+
+			<h2>
+				<small>Name:</small>
+				<br />
+				@Model.Name
+			</h2>
+			
+			<small>Creator: </small> <strong>@Model.Creator.Name.ToString()</strong>
+			<small>Tester: </small> <strong>@Model.Tester.Name.ToString()</strong>
+			<small>Resolver: </small> <strong>@Model.Resolver.Name.ToString()</strong>
+			
+			<h2>
+				<small>Description:</small>
+				<br />
+				<pre>@Model.Description</pre>
+			</h2>
+			<button class="btn btn-success btn-medium btn-block">Edit</button>
+			<button class="btn btn-danger btn-medium btn-block">Delete</button>
+		</div>
+	</div>
+</div>
+
+<div class="row-fluid">
+	<div class="span12">
+		<div class="module-inner">
+			<h3>Updates</h3>
+
+			<a class="btn btn-primary btn-medium btn-block" href="#AddUpdateModal" role="button" data-toggle="modal">Add Update</a>
+
+			<div class="Updates">
+				@if(Model.Updates != null && Model.Updates.Count > 0)
+				{
+					foreach(var update in Model.Updates)
+					{
+						<div class="update">
+							<h5>@update.Updater.Name</h5>
+							<h6>@update.InsertDate.ToString("MM/dd/yyyy h:mm tt")</h6>
+							<p><pre>@update.Description</pre></p>
+						</div>
+					}
+				}
+				else
+				{
+					<div class="update no-updates">
+						<h5>No updates have been entered for this bug.</h5>
+					</div>
+				}
+			</div>
+		</div>
+	</div>
+</div>
+
+@section Scripts
+{
+	<script type="text/javascript">
+		window.currentBugID = '@Model.ID';
+	</script>
+} 

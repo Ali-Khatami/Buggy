@@ -20,6 +20,7 @@ namespace Buggy
 		{
 			// Empy the database if someone makes a change
 			Database.SetInitializer<SiteDB>(new DropCreateDatabaseIfModelChanges<SiteDB>());
+			//Database.SetInitializer<SiteDB>(new DropCreateDatabaseAlways<SiteDB>());
 
 			AreaRegistration.RegisterAllAreas();
 

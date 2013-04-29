@@ -1,0 +1,18 @@
+﻿#RegisterContainer
+{
+}
+
+	#RegisterContainer #RegistrationFormArea
+	{
+		background-color: #fff;
+	}
+		
+		#RegisterContainer #RegistrationFormArea > div.inner
+		{
+			border: 3px solid #999;
+		}	
+
+		#RegisterContainer #RegistrationFormArea button.btn-primary
+		{
+			margin-top: 20px;
+		}

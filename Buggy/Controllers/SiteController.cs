@@ -3,37 +3,51 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
+using Buggy.Filters;
 using Buggy.Models;
+using Buggy.Models.Pages;
+using Buggy.Utilities;
+using Buggy.ViewModels.Partials;
 
 namespace Buggy.Controllers
 {
+	[AuthenticationFilter(AdminOnly = false, SectionRequiresAuthentication = true)]
     public class SiteController : Controller
     {
 		SiteDB db = new SiteDB();
 
 		public ActionResult Index()
         {
-			db.Bugs.Add(
-				new Bug()
+			OverviewPageModel model = new OverviewPageModel()
+			{
+				BugsCreatedByMe = new BugOverviewTableViewModel()
 				{
-					InsertDate = DateTime.Now,
-					Name = string.Format("Bug {0}", System.Guid.NewGuid().ToString()),
-					Description = "A sweet bug in the system.",
-					Type = Bug.BugType.Bug,
-					CurrentState = Bug.State.Created,
-					Priority = Bug.PriorityLevel.Meh
+					FilterField = Bug.FilterableFields.Creator,
+					FilterValue = UserUtils.CurrentUser.ID.ToString(),
+					SortDirection = Interfaces.SortDirection.Descending
+				},
+				BugsToBeResolvedByMe = new BugOverviewTableViewModel()
+				{
+					FilterField = Bug.FilterableFields.Resolver,
+					FilterValue = UserUtils.CurrentUser.ID.ToString(),
+					SortDirection = Interfaces.SortDirection.Descending
+				},
+				BugsToBeTestedByMe = new BugOverviewTableViewModel()
+				{
+					FilterField = Bug.FilterableFields.Tester,
+					FilterValue = UserUtils.CurrentUser.ID.ToString(),
+					SortDirection = Interfaces.SortDirection.Descending
 				}
-			);
-			db.SaveChanges();
-			List<Bug> bugs = (db.Bugs.Count() > 0) ? db.Bugs.Take(10).ToList() : new List<Bug>();
-			return View("~/Views/Pages/Index.cshtml", new { });
+			};
+
+			return View("~/Views/Pages/Index.cshtml", model);
         }
 
 		public ActionResult Detail(int bugID)
 		{
 			var bug = db.Bugs.Where(b => b.ID == bugID).FirstOrDefault();
 
-			return View();
+			return View("~/Views/Pages/Bug/Detail.cshtml", bug);
 		}
     }
 }
